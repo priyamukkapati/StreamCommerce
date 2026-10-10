@@ -1,2 +1,31 @@
 # StreamCommerce
-A local prototype for creator subscriptions, gifts, and a retry-safe transaction ledger.
+
+A small local prototype for creator subscriptions and gifting.
+
+## Current implementation
+
+Records purchases in SQLite, uses request IDs to prevent duplicate transactions, rejects conflicting retries, and calculates revenue in integer cents.
+
+## Run
+
+With Python 3.10+, clone this repository and run:
+
+```bash
+python3 app.py
+```
+
+Creator revenue: $6.99
+
+## Tests
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+## Limitations
+
+This demo uses an in-memory database. It does not process payments, manage recurring billing, authenticate users, or expose an API. Store('purchases.db') can persist the ledger locally.
+
+## Roadmap
+
+Add a Spring Boot API, PostgreSQL persistence, payment-provider sandbox integration, and authentication before considering event processing or deployment.
