@@ -1,31 +1,26 @@
 # StreamCommerce
 
-A small local prototype for creator subscriptions and gifting.
+What should happen when the same purchase request arrives twice? This small Python ledger focuses on that question.
 
-## Current implementation
+Purchases are stored in SQLite with a unique request ID. Repeating a request with the same details leaves the ledger unchanged; reusing its ID with different details raises an error. Revenue is summed in integer cents.
 
-Records purchases in SQLite, uses request IDs to prevent duplicate transactions, rejects conflicting retries, and calculates revenue in integer cents.
+## Try the example
 
-## Run
+Requires Python 3.10 or newer, with no extra packages.
 
-With Python 3.10+, clone this repository and run:
-
-```bash
+```sh
+git clone https://github.com/priyamukkapati/StreamCommerce.git
+cd StreamCommerce
 python3 app.py
-```
-
-Creator revenue: $6.99
-
-## Tests
-
-```bash
 python3 -m unittest discover -s tests -v
 ```
 
-## Limitations
+The example retries a subscription, adds a gift, and prints `Creator revenue: $6.99`. The retry is counted only once.
 
-This demo uses an in-memory database. It does not process payments, manage recurring billing, authenticate users, or expose an API. Store('purchases.db') can persist the ledger locally.
+The test checks duplicate requests, conflicting amounts, unchanged revenue after a rejected request, and negative-amount validation.
 
-## Roadmap
+## Storage and scope
 
-Add a Spring Boot API, PostgreSQL persistence, payment-provider sandbox integration, and authentication before considering event processing or deployment.
+The example uses an in-memory database. Passing `Store("purchases.db")` saves the ledger locally. This records purchase data; it does not charge a customer or manage recurring billing. There is no network API or authentication.
+
+The next useful check is concurrent requests from separate database connections, followed by reopening the ledger and verifying the total.
